@@ -11,35 +11,67 @@ function App() {
       name: "John",
       surname: "Johnson",
       email: "jh@email12.com",
-      phone: "9999999",
+      phoneNumber: "9999999",
+      address: {
+        homeName: "home name",
+        street: "street",
+        suburb: "suburb",
+        state: "state",
+        postcode: "1700",
+        country: "australia",
+      },
     },
     {
       id: 2,
       name: "John",
       surname: "Johnson",
       email: "jh@email12.com",
-      phone: "9999999",
+      phoneNumber: "9999999",
+      address: {
+        homeName: "home name",
+        street: "street",
+        suburb: "suburb",
+        state: "state",
+        postcode: "1700",
+        country: "australia",
+      },
     },
     {
       id: 3,
       name: "John",
       surname: "Johnson",
       email: "jh@email12.com",
-      phone: "9999999",
+      phoneNumber: "9999999",
+      address: {
+        homeName: "home name",
+        street: "street",
+        suburb: "suburb",
+        state: "state",
+        postcode: "1700",
+        country: "australia",
+      },
     },
     {
       id: 4,
       name: "John",
       surname: "Johnson",
       email: "jh@email12.com",
-      phone: "9999999",
+      phoneNumber: "9999999",
+      address: {
+        homeName: "home name",
+        street: "street",
+        suburb: "suburb",
+        state: "state",
+        postcode: "1700",
+        country: "australia",
+      },
     },
   ];
   return (
     <Layout>
       <Form />
       <Table
-        headers={["given name", "surname", "email", "phone", "actions"]}
+        headers={["given name", "surname", "email", "phoneNumber", "actions"]}
         content={dummyData}
       />
     </Layout>

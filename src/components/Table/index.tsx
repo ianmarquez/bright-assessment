@@ -1,15 +1,10 @@
+import { ReferralShape } from "../../types/Referral";
 import Row from "./Row";
 import RowHeading from "./RowHeading";
 
 export interface Props {
   headers: string[];
-  content: Array<{
-    id: number;
-    name: string;
-    surname: string;
-    email: string;
-    phone: string;
-  }>;
+  content: Array<ReferralShape>;
 }
 
 export default function Table(props: Props) {
@@ -20,8 +15,10 @@ export default function Table(props: Props) {
         <RowHeading headers={props.headers} />
         <tbody>
           {props.content.map((value) => {
-            const { id, name, surname, email, phone } = value;
-            return <Row content={[name, surname, email, phone]} key={id} />;
+            const { id, name, surname, email, phoneNumber } = value;
+            return (
+              <Row content={[name, surname, email, phoneNumber]} key={id} />
+            );
           })}
         </tbody>
       </table>
