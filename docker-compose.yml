@@ -1,0 +1,41 @@
+version: "3.8"
+services:
+  backend:
+    build:
+      context: ./backend
+      dockerfile: ./Dockerfile
+    container_name: backend
+    ports:
+      - "8080:8080"
+    networks:
+      - app-network
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: ./Dockerfile
+    container_name: frontend
+    ports:
+      - "5173:5173"
+    volumes:
+      - .:/app
+      - /app/node_modules
+    environment:
+      - USEPOLLING=true
+    networks:
+      - app-network
+  db:
+    image: postgres
+    container_name: db
+    restart: always
+    tty: true
+    volumes:
+      - ~/docker/data:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_PASSWORD=1234
+    ports:
+      - "5432:5432"
+    networks:
+      - app-network
+networks:
+  app-network:
+    driver: bridge
