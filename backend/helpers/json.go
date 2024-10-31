@@ -2,6 +2,7 @@ package helpers
 
 import (
 	"encoding/json"
+	"fmt"
 	"log"
 	"net/http"
 )
@@ -9,7 +10,7 @@ import (
 func RespondWithJSON(w http.ResponseWriter, code int, payload interface{}) {
 	dat, err := json.Marshal(payload)
 	if err != nil {
-		log.Printf("Failed to marshal JSON response: %v", payload)
+		fmt.Printf("Failed to marshal JSON response: %v", payload)
 		w.WriteHeader(http.StatusInternalServerError)
 		return
 	}
@@ -27,7 +28,7 @@ func RespondWithJSON(w http.ResponseWriter, code int, payload interface{}) {
 
 func RespondWithError(w http.ResponseWriter, code int, msg string) {
 	if code > 499 {
-		log.Println("Responding with 5XX error:", msg)
+		fmt.Println("Responding with 5XX error:", msg)
 	}
 
 	type errResponse struct {

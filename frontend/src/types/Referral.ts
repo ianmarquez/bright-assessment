@@ -1,11 +1,13 @@
 export interface ReferralShape {
-  id: number;
+  created_at: string;
+  updated_at: string;
+  id: string;
   name: string;
   surname: string;
   email: string;
-  phoneNumber: string;
+  phone: string;
   address: {
-    homeName: string;
+    name: string;
     street: string;
     suburb: string;
     state: string;

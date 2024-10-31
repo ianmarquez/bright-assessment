@@ -4,6 +4,8 @@ interface InputProps {
   placeholder: string;
   required?: boolean;
   type: React.HTMLInputTypeAttribute;
+  value: string;
+  onChange: (name: string, newValue: string) => void;
 }
 
 export default function Input({
@@ -12,6 +14,8 @@ export default function Input({
   type,
   placeholder,
   required = false,
+  value,
+  onChange,
 }: InputProps) {
   return (
     <label className="form-control w-full uppercase" htmlFor={name}>
@@ -22,7 +26,11 @@ export default function Input({
         </span>
       </div>
       <input
-        {...{ name, type, placeholder, required }}
+        {...{ name, type, placeholder, required, value }}
+        onChange={(event) => {
+          const newValue = event.target.value;
+          onChange(name, newValue);
+        }}
         className="input input-bordered w-full"
       />
     </label>

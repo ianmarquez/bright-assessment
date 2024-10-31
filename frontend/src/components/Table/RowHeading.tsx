@@ -7,7 +7,10 @@ export default function RowHeading(props: Props) {
     <thead>
       <tr>
         {props.headers.map((value, index) => (
-          <th className="uppercase text-slate-500" key={value + index}>
+          <th
+            className="uppercase text-slate-500 text-center"
+            key={value + index}
+          >
             {value}
           </th>
         ))}

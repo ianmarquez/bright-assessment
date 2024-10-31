@@ -24,7 +24,7 @@ type addressParameters struct {
 
 type parameters struct {
 	Name    string            `json:"name,omitempty"`
-	SurName string            `json:"sur_name,omitempty"`
+	SurName string            `json:"surname,omitempty"`
 	Email   string            `json:"email,omitempty"`
 	Phone   string            `json:"phone,omitempty"`
 	Address addressParameters `json:"address,omitempty"`
@@ -33,7 +33,6 @@ type parameters struct {
 func (api *ApiConfig) HandlerDeleteReferral(w http.ResponseWriter, r *http.Request) {
 	query := r.URL.Query()
 	id, err := uuid.Parse(query.Get("id"))
-	fmt.Print(query.Get("id"))
 	if err != nil {
 		helpers.RespondWithError(
 			w,
