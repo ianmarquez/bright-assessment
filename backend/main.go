@@ -1,6 +1,7 @@
 package main
 
 import (
+	"database/sql"
 	"fmt"
 	"log"
 	"net/http"
@@ -9,7 +10,10 @@ import (
 	"github.com/go-chi/chi"
 	"github.com/go-chi/cors"
 	"github.com/ianmarquez/bright-assessment/handlers"
+	"github.com/ianmarquez/bright-assessment/internal/database"
 	"github.com/joho/godotenv"
+
+	_ "github.com/lib/pq"
 )
 
 func main() {
@@ -21,6 +25,20 @@ func main() {
 	portString := os.Getenv("PORT")
 	if portString == "" {
 		log.Fatal("PORT env variable not set")
+	}
+
+	dbURL := os.Getenv("DB_URL")
+	if dbURL == "" {
+		log.Fatal("DB_URL variable not set")
+	}
+
+	conn, err := sql.Open("postgres", dbURL)
+	if err != nil {
+		log.Fatal("Can't connect to database")
+	}
+
+	apiCfg := handlers.ApiConfig{
+		DB: database.New(conn),
 	}
 
 	router := chi.NewRouter()
@@ -35,8 +53,11 @@ func main() {
 	}))
 
 	v1Router := chi.NewRouter()
-	v1Router.HandleFunc("/ready", handlers.HandlerReadiness)
-	v1Router.HandleFunc("/error", handlers.HandlerError)
+	v1Router.Get("/healthz", handlers.HandlerReadiness)
+	v1Router.Get("/error", handlers.HandlerError)
+	v1Router.Post("/referrals", apiCfg.HandlerCreateReferral)
+	v1Router.Delete("/referrals", apiCfg.HandlerDeleteReferral)
+	v1Router.Get("/referrals", apiCfg.HandlerFetchAllReferral)
 
 	router.Mount("/v1", v1Router)
 
