@@ -7,6 +7,7 @@ package database
 
 import (
 	"context"
+	"database/sql"
 	"time"
 
 	"github.com/google/uuid"
@@ -41,6 +42,58 @@ func (q *Queries) CreateAddress(ctx context.Context, arg CreateAddressParams) (A
 		arg.Postcode,
 		arg.Country,
 		arg.ReferralsID,
+	)
+	var i Address
+	err := row.Scan(
+		&i.ID,
+		&i.CreatedAt,
+		&i.UpdatedAt,
+		&i.Name,
+		&i.Street,
+		&i.Suburb,
+		&i.State,
+		&i.Postcode,
+		&i.Country,
+		&i.ReferralsID,
+	)
+	return i, err
+}
+
+const updateAddress = `-- name: UpdateAddress :one
+UPDATE address
+SET
+name = coalesce($3, name),
+street = coalesce($4, street),
+suburb = coalesce($5, suburb),
+state = coalesce($6, state),
+postCode = coalesce($7, postCode),
+country = coalesce($8, country),
+updated_at = $1
+WHERE referrals_id = $2
+RETURNING id, created_at, updated_at, name, street, suburb, state, postcode, country, referrals_id
+`
+
+type UpdateAddressParams struct {
+	UpdatedAt   time.Time
+	ReferralsID uuid.UUID
+	Name        sql.NullString
+	Street      sql.NullString
+	Suburb      sql.NullString
+	State       sql.NullString
+	PostCode    sql.NullString
+	Country     sql.NullString
+}
+
+func (q *Queries) UpdateAddress(ctx context.Context, arg UpdateAddressParams) (Address, error) {
+	row := q.db.QueryRowContext(ctx, updateAddress,
+		arg.UpdatedAt,
+		arg.ReferralsID,
+		arg.Name,
+		arg.Street,
+		arg.Suburb,
+		arg.State,
+		arg.PostCode,
+		arg.Country,
 	)
 	var i Address
 	err := row.Scan(

@@ -7,6 +7,7 @@ package database
 
 import (
 	"context"
+	"database/sql"
 	"time"
 
 	"github.com/google/uuid"
@@ -51,24 +52,14 @@ func (q *Queries) CreateReferral(ctx context.Context, arg CreateReferralParams) 
 	return i, err
 }
 
-const deleteReferral = `-- name: DeleteReferral :one
+const deleteReferral = `-- name: DeleteReferral :exec
 DELETE FROM referrals WHERE id = $1
 RETURNING id, created_at, updated_at, name, surname, email, phone
 `
 
-func (q *Queries) DeleteReferral(ctx context.Context, id uuid.UUID) (Referral, error) {
-	row := q.db.QueryRowContext(ctx, deleteReferral, id)
-	var i Referral
-	err := row.Scan(
-		&i.ID,
-		&i.CreatedAt,
-		&i.UpdatedAt,
-		&i.Name,
-		&i.Surname,
-		&i.Email,
-		&i.Phone,
-	)
-	return i, err
+func (q *Queries) DeleteReferral(ctx context.Context, id uuid.UUID) error {
+	_, err := q.db.ExecContext(ctx, deleteReferral, id)
+	return err
 }
 
 const selectAllReferrals = `-- name: SelectAllReferrals :many
@@ -122,4 +113,48 @@ func (q *Queries) SelectAllReferrals(ctx context.Context) ([]SelectAllReferralsR
 		return nil, err
 	}
 	return items, nil
+}
+
+const updateReferral = `-- name: UpdateReferral :one
+UPDATE referrals
+SET
+name = coalesce($3, name),
+surName = coalesce($4, surName),
+email = coalesce($5, email),
+phone = coalesce($6, phone),
+updated_at = $1
+WHERE
+id = $2
+RETURNING id, created_at, updated_at, name, surname, email, phone
+`
+
+type UpdateReferralParams struct {
+	UpdatedAt time.Time
+	ID        uuid.UUID
+	Name      sql.NullString
+	SurName   sql.NullString
+	Email     sql.NullString
+	Phone     sql.NullString
+}
+
+func (q *Queries) UpdateReferral(ctx context.Context, arg UpdateReferralParams) (Referral, error) {
+	row := q.db.QueryRowContext(ctx, updateReferral,
+		arg.UpdatedAt,
+		arg.ID,
+		arg.Name,
+		arg.SurName,
+		arg.Email,
+		arg.Phone,
+	)
+	var i Referral
+	err := row.Scan(
+		&i.ID,
+		&i.CreatedAt,
+		&i.UpdatedAt,
+		&i.Name,
+		&i.Surname,
+		&i.Email,
+		&i.Phone,
+	)
+	return i, err
 }

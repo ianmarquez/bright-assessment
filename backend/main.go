@@ -55,10 +55,14 @@ func main() {
 	v1Router := chi.NewRouter()
 	v1Router.Get("/healthz", handlers.HandlerReadiness)
 	v1Router.Get("/error", handlers.HandlerError)
-	v1Router.Post("/referrals", apiCfg.HandlerCreateReferral)
-	v1Router.Delete("/referrals", apiCfg.HandlerDeleteReferral)
-	v1Router.Get("/referrals", apiCfg.HandlerFetchAllReferral)
 
+	referralsRouter := chi.NewRouter()
+	referralsRouter.Post("/", apiCfg.HandlerCreateReferral)
+	referralsRouter.Delete("/", apiCfg.HandlerDeleteReferral)
+	referralsRouter.Get("/", apiCfg.HandlerFetchAllReferral)
+	referralsRouter.Put("/{id}", apiCfg.HandlerUpdateReferral)
+
+	v1Router.Mount("/referrals", referralsRouter)
 	router.Mount("/v1", v1Router)
 
 	srv := &http.Server{
