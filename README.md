@@ -9,6 +9,10 @@ This project was made to adhere to Vault Consulting's hiring process for the pos
 - `PostgreSQL`
 - `Docker`
 
+## Time to completion
+
+This project took me a total of 8 hours to reach this state.
+
 ## Pre-requisites
 
 1. You must have docker installed locally as this is a containerized application.
@@ -18,7 +22,7 @@ This project was made to adhere to Vault Consulting's hiring process for the pos
 To run the application just run `docker compose up --build`
 
 **!IMPORTANT** once app is running it wont't work as the database is not yet created. We only ran the database and haven't created the schema.
-to create the schema you have 2 options. I will detail both ways to do it below;
+to create the schema you have 2 options. I will detail both ways in the steps below
 
 ### Using Goose
 
@@ -46,9 +50,10 @@ to create the schema you have 2 options. I will detail both ways to do it below;
 
 1. Go to `./backend/`
 2. Go to `./backend/sql/schema` by doing `cd ./backend/sql/schema`
-3. Copy the content of the schema folder and run it manually based on file name index. ie(001 first then 002...)
-4. verify that the schema has been created by logging in to PostgreSQL connecting to localhost
+3. Create the `referralbuilder` database
+4. Copy the content of the schema folder and run it manually based on file name index. ie(001 first then 002...)
+5. verify that the schema has been created by logging in to PostgreSQL connecting to localhost
 
 ### Caveats/Code Smells
 
-I have if you check the code, I have committed environment variables. This is fine for the purpose of this exam as everything is being ran locally and I have no intention of pushing this into production. This was done to make the testing/running of this application as smooth as possible for the checkers.
+If you check the code, I have committed environment variables. This is fine for the purpose of this exam as everything is being ran locally and I have no intention of pushing this into production. This was done to make the testing/running of this application as smooth as possible for the checkers.

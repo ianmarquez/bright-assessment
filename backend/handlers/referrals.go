@@ -18,7 +18,7 @@ type addressParameters struct {
 	Street   string `json:"street,omitempty"`
 	Suburb   string `json:"suburb,omitempty"`
 	State    string `json:"state,omitempty"`
-	Postcode string `json:"post_code,omitempty"`
+	Postcode string `json:"postcode,omitempty"`
 	Country  string `json:"country,omitempty"`
 }
 
