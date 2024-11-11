@@ -8,11 +8,13 @@ import { createReferral, updateReferral } from "../../api/referrals";
 
 export default function Form() {
   const dialogRef = useRef<HTMLDialogElement | null>(null);
+  const fileInputRef = useRef<HTMLInputElement | null>(null);
   const { selected, updateSelected, clearSelected, addReferrals } =
     useReferralStore();
   const isEditing = !!selected.id;
   const mutation = useMutation({
     mutationFn: () => {
+      console.log(selected);
       if (isEditing) {
         return updateReferral(selected);
       }
@@ -28,6 +30,9 @@ export default function Form() {
 
   const onFormSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+    if (fileInputRef?.current) {
+      fileInputRef.current.value = "";
+    }
     mutation.mutate();
   };
 
@@ -151,7 +156,19 @@ export default function Form() {
             <input
               type="file"
               name="avatar"
+              ref={fileInputRef}
+              onChange={(event) => {
+                const newValue = event.target.files;
+                const reader = new FileReader();
+                if (!newValue) return;
+                updateSelected("fileName", newValue[0].name);
+                reader.readAsDataURL(newValue[0]);
+                reader.onload = () => {
+                  updateSelected("avatar", reader.result as string);
+                };
+              }}
               className="file-input file-input-bordered w-full"
+              accept=".jpeg,.png,.jpg"
             />
           </label>
           <div className="modal-action">

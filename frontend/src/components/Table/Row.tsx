@@ -1,16 +1,20 @@
 import { useMutation } from "@tanstack/react-query";
 import { twMerge } from "tailwind-merge";
-import { FaPencilAlt, FaTrashAlt } from "react-icons/fa";
+import { FaLock, FaPencilAlt, FaTrashAlt } from "react-icons/fa";
 
 import { useReferralStore } from "../../stores/referrals";
 import { deleteReferral } from "../../api/referrals";
 
-interface Props {
+export interface Props {
   id: string;
   content: string[];
+  avatar?: {
+    fileName: string;
+    data: string;
+  };
 }
 
-export default function Row({ content, id }: Props) {
+export default function Row({ content, id, avatar }: Props) {
   const {
     deleteReferrals: deleteReferralStore,
     selected,
@@ -33,6 +37,13 @@ export default function Row({ content, id }: Props) {
         !currentRowSelected ? setSelected(id) : clearSelected();
       }}
     >
+      <td>
+        <div className="avatar">
+          <div className="rounded-full w-8">
+            <img src={avatar ? avatar.data : "/avatar.png"} />
+          </div>
+        </div>
+      </td>
       {content.map((value, index) => (
         <td key={index + value} className="font-semibold text-center">
           {value}
@@ -41,7 +52,7 @@ export default function Row({ content, id }: Props) {
       <td>
         <div className="flex gap-2 justify-center">
           {mutation.isPending || currentRowSelected ? (
-            <span className="loading loading-spinner loading-xs"></span>
+            <FaLock className="h-4 w-4" />
           ) : (
             <>
               <button

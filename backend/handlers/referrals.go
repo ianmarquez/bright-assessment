@@ -23,11 +23,13 @@ type addressParameters struct {
 }
 
 type parameters struct {
-	Name    string            `json:"name,omitempty"`
-	SurName string            `json:"surname,omitempty"`
-	Email   string            `json:"email,omitempty"`
-	Phone   string            `json:"phone,omitempty"`
-	Address addressParameters `json:"address,omitempty"`
+	Name     string            `json:"name,omitempty"`
+	SurName  string            `json:"surname,omitempty"`
+	Email    string            `json:"email,omitempty"`
+	Phone    string            `json:"phone,omitempty"`
+	Address  addressParameters `json:"address,omitempty"`
+	Avatar   string            `json:"avatar,omitempty"`
+	FileName string            `json:"fileName,omitempty"`
 }
 
 func (api *ApiConfig) HandlerDeleteReferral(w http.ResponseWriter, r *http.Request) {
@@ -105,6 +107,8 @@ func (api *ApiConfig) HandlerUpdateReferral(w http.ResponseWriter, r *http.Reque
 		SurName:   helpers.CastNullString(params.SurName),
 		Email:     helpers.CastNullString(params.Email),
 		Phone:     helpers.CastNullString(params.Phone),
+		Avatar:    helpers.CastNullString(params.Avatar),
+		FileName:  helpers.CastNullString(params.FileName),
 	})
 	if err != nil {
 		helpers.RespondWithError(
@@ -165,6 +169,8 @@ func (api *ApiConfig) HandlerCreateReferral(w http.ResponseWriter, r *http.Reque
 		Phone:     params.Phone,
 		CreatedAt: time.Now().UTC(),
 		UpdatedAt: time.Now().UTC(),
+		Avatar:    helpers.CastNullString(params.Avatar),
+		Filename:  helpers.CastNullString(params.FileName),
 	})
 
 	if err != nil {

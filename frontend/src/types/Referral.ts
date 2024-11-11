@@ -14,4 +14,6 @@ export interface ReferralShape {
     postcode: string;
     country: string;
   };
+  avatar?: string;
+  fileName?: string;
 }

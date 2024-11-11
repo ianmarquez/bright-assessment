@@ -1,6 +1,6 @@
 -- name: CreateReferral :one
-INSERT INTO referrals (id, created_at, updated_at, name, surName, email, phone)
-VALUES ($1, $2, $3, $4, $5, $6, $7)
+INSERT INTO referrals (id, created_at, updated_at, name, surName, email, phone, avatar, fileName)
+VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)
 RETURNING *;
 
 -- name: DeleteReferral :exec
@@ -20,6 +20,8 @@ name = coalesce(sqlc.narg('name'), name),
 surName = coalesce(sqlc.narg('surName'), surName),
 email = coalesce(sqlc.narg('email'), email),
 phone = coalesce(sqlc.narg('phone'), phone),
+avatar = coalesce(sqlc.narg('avatar'), avatar),
+fileName = coalesce(sqlc.narg('fileName'), fileName),
 updated_at = $1
 WHERE
 id = $2

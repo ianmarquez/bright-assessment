@@ -1,6 +1,7 @@
 import { ReferralShape } from "../../types/Referral";
 import Row from "./Row";
 import RowHeading from "./RowHeading";
+import { Props as RowProps } from "./Row";
 
 export interface Props {
   headers: string[];
@@ -16,9 +17,17 @@ export default function Table(props: Props) {
         <tbody>
           {props.content?.map((value) => {
             const { id, name, surname, email, phone } = value;
-            return (
-              <Row id={id} content={[name, surname, email, phone]} key={id} />
-            );
+            const props: RowProps = {
+              id,
+              content: [name, surname, email, phone],
+            };
+            if (value.fileName && value.avatar) {
+              props.avatar = {
+                fileName: value.fileName,
+                data: value.avatar,
+              };
+            }
+            return <Row {...props} key={id} />;
           })}
         </tbody>
       </table>

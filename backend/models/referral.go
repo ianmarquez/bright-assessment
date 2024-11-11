@@ -8,23 +8,25 @@ import (
 )
 
 type Address struct {
-	Name     string `json:"name,omitempty"`
-	Street   string `json:"street,omitempty"`
-	Suburb   string `json:"suburb,omitempty"`
-	State    string `json:"state,omitempty"`
-	Postcode string `json:"postcode,omitempty"`
-	Country  string `json:"country,omitempty"`
+	Name     string `json:"name"`
+	Street   string `json:"street"`
+	Suburb   string `json:"suburb"`
+	State    string `json:"state"`
+	Postcode string `json:"postcode"`
+	Country  string `json:"country"`
 }
 
 type Referral struct {
-	ID        uuid.UUID `json:"id,omitempty"`
-	CreatedAt time.Time `json:"created_at,omitempty"`
-	UpdatedAt time.Time `json:"updated_at,omitempty"`
-	Name      string    `json:"name,omitempty"`
-	Surname   string    `json:"surname,omitempty"`
-	Email     string    `json:"email,omitempty"`
-	Phone     string    `json:"phone,omitempty"`
-	Address   Address   `json:"address,omitempty"`
+	ID        uuid.UUID `json:"id"`
+	CreatedAt time.Time `json:"created_at"`
+	UpdatedAt time.Time `json:"updated_at"`
+	Name      string    `json:"name"`
+	Surname   string    `json:"surname"`
+	Email     string    `json:"email"`
+	Phone     string    `json:"phone"`
+	Address   Address   `json:"address"`
+	Avatar    string    `json:"avatar"`
+	FileName  string    `json:"fileName"`
 }
 
 func DatabaseReferralToReferral(dbReferral database.Referral, dbAddress database.Address) Referral {
@@ -45,6 +47,8 @@ func DatabaseReferralToReferral(dbReferral database.Referral, dbAddress database
 		Email:     dbReferral.Email,
 		Phone:     dbReferral.Phone,
 		Address:   address,
+		Avatar:    dbReferral.Avatar.String,
+		FileName:  dbReferral.Filename.String,
 	}
 }
 

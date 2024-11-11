@@ -5,6 +5,7 @@
 package database
 
 import (
+	"database/sql"
 	"time"
 
 	"github.com/google/uuid"
@@ -31,4 +32,6 @@ type Referral struct {
 	Surname   string
 	Email     string
 	Phone     string
+	Avatar    sql.NullString
+	Filename  sql.NullString
 }

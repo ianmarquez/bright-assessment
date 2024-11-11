@@ -14,9 +14,9 @@ import (
 )
 
 const createReferral = `-- name: CreateReferral :one
-INSERT INTO referrals (id, created_at, updated_at, name, surName, email, phone)
-VALUES ($1, $2, $3, $4, $5, $6, $7)
-RETURNING id, created_at, updated_at, name, surname, email, phone
+INSERT INTO referrals (id, created_at, updated_at, name, surName, email, phone, avatar, fileName)
+VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)
+RETURNING id, created_at, updated_at, name, surname, email, phone, avatar, filename
 `
 
 type CreateReferralParams struct {
@@ -27,6 +27,8 @@ type CreateReferralParams struct {
 	Surname   string
 	Email     string
 	Phone     string
+	Avatar    sql.NullString
+	Filename  sql.NullString
 }
 
 func (q *Queries) CreateReferral(ctx context.Context, arg CreateReferralParams) (Referral, error) {
@@ -38,6 +40,8 @@ func (q *Queries) CreateReferral(ctx context.Context, arg CreateReferralParams) 
 		arg.Surname,
 		arg.Email,
 		arg.Phone,
+		arg.Avatar,
+		arg.Filename,
 	)
 	var i Referral
 	err := row.Scan(
@@ -48,13 +52,15 @@ func (q *Queries) CreateReferral(ctx context.Context, arg CreateReferralParams) 
 		&i.Surname,
 		&i.Email,
 		&i.Phone,
+		&i.Avatar,
+		&i.Filename,
 	)
 	return i, err
 }
 
 const deleteReferral = `-- name: DeleteReferral :exec
 DELETE FROM referrals WHERE id = $1
-RETURNING id, created_at, updated_at, name, surname, email, phone
+RETURNING id, created_at, updated_at, name, surname, email, phone, avatar, filename
 `
 
 func (q *Queries) DeleteReferral(ctx context.Context, id uuid.UUID) error {
@@ -63,7 +69,7 @@ func (q *Queries) DeleteReferral(ctx context.Context, id uuid.UUID) error {
 }
 
 const selectAllReferrals = `-- name: SelectAllReferrals :many
-SELECT referrals.id, referrals.created_at, referrals.updated_at, referrals.name, referrals.surname, referrals.email, referrals.phone, address.id, address.created_at, address.updated_at, address.name, address.street, address.suburb, address.state, address.postcode, address.country, address.referrals_id
+SELECT referrals.id, referrals.created_at, referrals.updated_at, referrals.name, referrals.surname, referrals.email, referrals.phone, referrals.avatar, referrals.filename, address.id, address.created_at, address.updated_at, address.name, address.street, address.suburb, address.state, address.postcode, address.country, address.referrals_id
 FROM referrals
 JOIN address ON address.referrals_id = referrals.id
 WHERE 1 = 1
@@ -91,6 +97,8 @@ func (q *Queries) SelectAllReferrals(ctx context.Context) ([]SelectAllReferralsR
 			&i.Referral.Surname,
 			&i.Referral.Email,
 			&i.Referral.Phone,
+			&i.Referral.Avatar,
+			&i.Referral.Filename,
 			&i.Address.ID,
 			&i.Address.CreatedAt,
 			&i.Address.UpdatedAt,
@@ -122,10 +130,12 @@ name = coalesce($3, name),
 surName = coalesce($4, surName),
 email = coalesce($5, email),
 phone = coalesce($6, phone),
+avatar = coalesce($7, avatar),
+fileName = coalesce($8, fileName),
 updated_at = $1
 WHERE
 id = $2
-RETURNING id, created_at, updated_at, name, surname, email, phone
+RETURNING id, created_at, updated_at, name, surname, email, phone, avatar, filename
 `
 
 type UpdateReferralParams struct {
@@ -135,6 +145,8 @@ type UpdateReferralParams struct {
 	SurName   sql.NullString
 	Email     sql.NullString
 	Phone     sql.NullString
+	Avatar    sql.NullString
+	FileName  sql.NullString
 }
 
 func (q *Queries) UpdateReferral(ctx context.Context, arg UpdateReferralParams) (Referral, error) {
@@ -145,6 +157,8 @@ func (q *Queries) UpdateReferral(ctx context.Context, arg UpdateReferralParams) 
 		arg.SurName,
 		arg.Email,
 		arg.Phone,
+		arg.Avatar,
+		arg.FileName,
 	)
 	var i Referral
 	err := row.Scan(
@@ -155,6 +169,8 @@ func (q *Queries) UpdateReferral(ctx context.Context, arg UpdateReferralParams) 
 		&i.Surname,
 		&i.Email,
 		&i.Phone,
+		&i.Avatar,
+		&i.Filename,
 	)
 	return i, err
 }

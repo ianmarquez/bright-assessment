@@ -38,7 +38,14 @@ function App() {
     <Layout>
       <Form />
       <Table
-        headers={["given name", "surname", "email", "phoneNumber", "actions"]}
+        headers={[
+          "",
+          "given name",
+          "surname",
+          "email",
+          "phoneNumber",
+          "actions",
+        ]}
         content={referrals}
       />
     </Layout>

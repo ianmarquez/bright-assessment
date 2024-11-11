@@ -17,6 +17,8 @@ const defaultFormState: ReferralShape = {
     postcode: "",
     country: "",
   },
+  avatar: "",
+  fileName: "",
 };
 
 interface ReferralsStore {
