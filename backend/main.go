@@ -8,6 +8,7 @@ import (
 	"os"
 
 	"github.com/go-chi/chi"
+	"github.com/go-chi/chi/middleware"
 	"github.com/go-chi/cors"
 	"github.com/ianmarquez/bright-assessment/handlers"
 	"github.com/ianmarquez/bright-assessment/internal/database"
@@ -19,7 +20,7 @@ import (
 func main() {
 	err := godotenv.Load(".env")
 	if err != nil {
-		log.Fatal("godotenv failed to load environment parames with err:", err)
+		log.Fatal("godotenv failed to load environment params with err:", err)
 	}
 
 	portString := os.Getenv("PORT")
@@ -42,6 +43,7 @@ func main() {
 	}
 
 	router := chi.NewRouter()
+	router.Use(middleware.Logger)
 
 	router.Use(cors.Handler(cors.Options{
 		AllowedOrigins:   []string{"https://*", "http://*"},
